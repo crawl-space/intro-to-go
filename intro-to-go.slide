@@ -1,0 +1,170 @@
+Introduction To Go
+June 24 2014
+
+James Bowes
+Developer, GoInstant
+@jrbowes
+
+* Hot Tip
+
+- Always google for *golang*
+
+* What is Go?
+
+* Go is Gophers!
+
+.image https://pbs.twimg.com/media/BmcLZPdCAAAbcVo.jpg
+
+* Go is:
+- imperitive
+- compiled
+- strongly and statically typed
+
+* Static typing? Ewww!
+
+Type inferrence makes static types okay.
+
+.code infer.go
+
+* More Niceties
+
+* No Semicolons; Fewer brackets
+
+.play -edit simpleif.go
+
+* Multi-value returns
+
+.play multivalue.go
+
+* Loops
+There is only `for`
+
+	for {
+		fmt.Println("printing this forever")
+	}
+
+	for cursor.HasNext() {
+		row := cursor.Next()
+		// process results
+	}
+
+	for int i := 0; i < len(list); i++ {
+
+	} 
+
+* Range
+Easy slice iteration
+
+.play range.go
+
+* Style
+
+There is One True Formatting style for Go. It is enforced by `go fmt`.
+
+Without the choice, you can focus on writing great code!
+
+* Concurrency
+
+* What Is Concurrency?
+
+Concurrency is when two tasks can start, run, and complete in overlapping time
+periods. It doesn't necessarily mean they'll ever both be running at the same
+instant. Eg. multitasking on a single-core machine.
+
+.link http://stackoverflow.com/a/1050257/1205715
+
+* Concurrency Is Not Parallelism
+
+Parallelism implies execution at literally the same time, on different cores,
+processors, or systems.
+
+Concurrency exists without parallelism.
+
+* Go Provides Concurrency, And Takes Advantage Of Paralleism
+
+Go's built-in scheduler runs lightweight threads on available processors in
+conjunction with a "hidden" async I/O model.
+
+* Goroutines
+
+Like threads, but lightweight in both syntax and resources used.
+
+.play goroutineprint.go /START OMIT/,/END OMIT/
+
+* Goroutines
+
+Goroutines stop when the called function exits. You cannot stop a goroutine
+from another Goroutine.
+
+* Don't communicate by sharing memory; share memory by communicating.
+
+* Channels
+
+Like Unix pipes.
+
+- Signal completion to other Goroutines
+- Give "work" to Goroutines
+- Shut down other Goroutines
+
+* Channels (I)
+
+Signal completion
+
+	c := make(chan int)  // Allocate a channel.
+	// Start the sort in a goroutine; when it completes, signal on the channel.
+	go func() {
+	    list.Sort()
+	    c <- 1  // Send a signal; value does not matter.
+	}()
+	doSomethingForAWhile()
+	<-c   // Wait for sort to finish; discard sent value.
+
+* Channels (II)
+
+Workers
+
+.play workers.go /START OMIT/,/END OMIT/
+
+* Channels (III)
+
+Shut down other Goroutines
+
+.code shutdown.go /START OMIT/,/END OMIT/
+
+* Structs
+
+	// Timer handles triggering event emission, and coordination between Storage
+	// and the Sender
+	type Timer struct {
+		Shutdown // Timer embeds the Shutdown struct. Think inheritance.
+
+		timerRunning bool
+		timer        *time.Timer
+		nextSend     time.Time
+		m            *sync.Mutex
+
+		sendFunc SendFunc
+	}
+
+* Methods
+
+	// Stop gracefully stops the timer, ensuring any running processing is complete.
+	func (t *Timer) Stop() {
+		close(t.shutdown)
+		t.Pause()
+	}
+
+You can define a method on any type, not just structs!
+
+* Interfaces
+
+Interfaces are implicit; if a datatype implements the methods of an interface,
+it implements that interface. No `implements` keyword!
+
+	// Sender describes the interface for sending delayd entries after their time
+	// has lapsed.
+	type Sender interface {
+		Send(e Entry) (err error)
+	}
+
+* Go forth and code!
