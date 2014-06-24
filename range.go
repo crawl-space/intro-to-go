@@ -7,4 +7,14 @@ func main() {
 	for _, val := range entries {
 		fmt.Println(val)
 	}
+
+	scores := map[string]int{
+		"jeff": 0,
+		"dave": -1,
+		"ben":  12,
+	}
+
+	for name, score := range scores {
+		fmt.Println(name, ":", score)
+	}
 }

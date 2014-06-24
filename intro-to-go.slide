@@ -53,13 +53,21 @@ There is only `for`
 	} 
 
 * Range
-Easy slice iteration
+Easy slice and map iteration
 
 .play range.go
+
+* Defer
+
+Execute a statement before returning from a function, regardless of exit path.
+
+.code defer.go
 
 * Style
 
 There is One True Formatting style for Go. It is enforced by `go fmt`.
+
+Unused imports and variables are compiler errors.
 
 Without the choice, you can focus on writing great code!
 
@@ -106,7 +114,7 @@ Like Unix pipes.
 - Give "work" to Goroutines
 - Shut down other Goroutines
 
-* Channels (I)
+* Channels (II)
 
 Signal completion
 
@@ -119,13 +127,13 @@ Signal completion
 	doSomethingForAWhile()
 	<-c   // Wait for sort to finish; discard sent value.
 
-* Channels (II)
+* Channels (III)
 
 Workers
 
 .play workers.go /START OMIT/,/END OMIT/
 
-* Channels (III)
+* Channels (IV)
 
 Shut down other Goroutines
 
@@ -166,5 +174,9 @@ it implements that interface. No `implements` keyword!
 	type Sender interface {
 		Send(e Entry) (err error)
 	}
+
+* Interfaces (II)
+
+.code amqpsender.go
 
 * Go forth and code!
